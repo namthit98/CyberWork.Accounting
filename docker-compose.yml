@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: cyberwork_accounting_db
+    environment:
+      SA_PASSWORD: "Passw0rd!"
+      ACCEPT_EULA: "Y"
+    restart: always
+    volumes:
+      - cyberwork_accounting_sqlserver_data:/var/opt/mssql
+    ports:
+      - "1433:1433"
+
+#network section
+networks:
+  default:
+    name: cyberwork_accounting
+    driver: bridge
+
+#volumes section
+volumes:
+  cyberwork_accounting_sqlserver_data:
+    name: cyberwork_accounting_sqlserver_data
