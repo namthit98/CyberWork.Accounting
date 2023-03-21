@@ -24,11 +24,12 @@ public class PaginatedList<T>
 
     public bool HasNextPage => PageNumber < TotalPages;
 
-    public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageNumber, int pageSize)
+    public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageNumber, int pageSize,
+        CancellationToken cancellationToken)
     {
         var count = await source.CountAsync();
         var items = await source.Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize).ToListAsync();
+            .Take(pageSize).ToListAsync(cancellationToken);
 
         return new PaginatedList<T>(items, count, pageNumber, pageSize);
     }

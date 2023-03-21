@@ -4,4 +4,4 @@ using MediatR;
 
 namespace CyberWork.Accounting.Application.Organizations.Queries.GetAllOrganizations;
 
-public record GetAllOrganizationsQuery : IRequest<Result<IEnumerable<OrganizationDto>>>;
+public record GetAllOrganizationsQuery : IRequest<Result<List<OrganizationDto>>>;

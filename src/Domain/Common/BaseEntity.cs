@@ -2,9 +2,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CyberWork.Accounting.Domain.Common;
 
-public abstract class BaseEntity
+public abstract class BaseEntity<TKey>
 {
-    public Guid Id { get; set; }
+    public TKey Id { get; set; }
 
     private readonly List<BaseEvent> _domainEvents = new();
 

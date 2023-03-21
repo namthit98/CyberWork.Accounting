@@ -1,10 +1,7 @@
 using AutoMapper;
-using CyberWork.Accounting.Application.Common.Exceptions;
 using CyberWork.Accounting.Application.Common.Interfaces;
 using CyberWork.Accounting.Application.Common.Models;
-using CyberWork.Accounting.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace CyberWork.Accounting.Application.Organizations.Commands.CreateOrganization;
 
@@ -12,35 +9,18 @@ namespace CyberWork.Accounting.Application.Organizations.Commands.CreateOrganiza
 public class CreateOrganizationCommandHandler
     : IRequestHandler<CreateOrganizationCommand, Result<Guid>>
 {
-    private readonly IApplicationDbContext _context;
-    private readonly IMapper _mapper;
+    private readonly IOrganizationRepository _organizationRepository;
 
-    public CreateOrganizationCommandHandler(IApplicationDbContext context,
-        IMapper mapper)
+    public CreateOrganizationCommandHandler(IOrganizationRepository organizationRepository)
     {
-        _context = context;
-        _mapper = mapper;
+        _organizationRepository = organizationRepository;
     }
 
-    public async Task<Result<Guid>> Handle(CreateOrganizationCommand request,
+    public async Task<Result<Guid>> Handle(CreateOrganizationCommand organization,
        CancellationToken cancellationToken)
     {
-        var result = await _context.Organizations
-            .Where(x => x.Code == request.Code)
-            .FirstOrDefaultAsync(cancellationToken);
+        var result = await _organizationRepository.CreateOrganization(organization, cancellationToken);
 
-        if (result != null)
-        {
-            throw new ConflictException(nameof(Organization),
-                nameof(CreateOrganizationCommand.Code), request.Code!);
-        }
-
-        var entity = _mapper.Map<Organization>(request);
-
-        _context.Organizations.Add(entity);
-
-        await _context.SaveChangesAsync(cancellationToken);
-
-        return Result<Guid>.Success(entity.Id);
+        return Result<Guid>.Success(result);
     }
 }

@@ -1,6 +1,6 @@
 namespace CyberWork.Accounting.Domain.Common;
 
-public abstract class BaseAuditableEntity : BaseEntity
+public abstract class BaseAuditableEntity<TKey> : BaseEntity<TKey>
 {
     public DateTimeOffset Created { get; set; }
 

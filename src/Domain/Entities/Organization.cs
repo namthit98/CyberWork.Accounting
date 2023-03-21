@@ -1,7 +1,7 @@
 
 namespace CyberWork.Accounting.Domain.Entities;
 
-public class Organization : BaseAuditableEntity
+public class Organization : BaseAuditableEntity<Guid>
 {
     public string Code { get; set; }
     public string Name { get; set; }
