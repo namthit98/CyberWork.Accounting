@@ -19,7 +19,8 @@ public class CreateOrganizationCommandHandler
     public async Task<Result<Guid>> Handle(CreateOrganizationCommand organization,
        CancellationToken cancellationToken)
     {
-        var result = await _organizationRepository.CreateOrganization(organization, cancellationToken);
+        var result = await _organizationRepository
+            .CreateOrganizationAsync(organization, cancellationToken);
 
         return Result<Guid>.Success(result);
     }

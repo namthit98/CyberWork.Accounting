@@ -5,7 +5,9 @@ using CyberWork.Accounting.Application.Common.Interfaces;
 using CyberWork.Accounting.Application.Common.Mappings;
 using CyberWork.Accounting.Application.Common.Models;
 using CyberWork.Accounting.Application.Organizations.Commands.CreateOrganization;
+using CyberWork.Accounting.Application.Organizations.Commands.UpdateOrganization;
 using CyberWork.Accounting.Application.Organizations.DTOs;
+using CyberWork.Accounting.Application.Organizations.Queries.GetOrganization;
 using CyberWork.Accounting.Application.Organizations.Queries.GetOrganizations;
 using CyberWork.Accounting.Domain.Entities;
 using CyberWork.Accounting.Infrastructure.Common;
@@ -26,7 +28,7 @@ public class OrganizationRepository : RepositoryBase<Organization, Guid, Applica
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
-    public async Task<Guid> CreateOrganization(CreateOrganizationCommand organization,
+    public async Task<Guid> CreateOrganizationAsync(CreateOrganizationCommand organization,
         CancellationToken cancellationToken)
     {
         var result = await FindByCondition(x => x.Code == organization.Code)
@@ -43,11 +45,38 @@ public class OrganizationRepository : RepositoryBase<Organization, Guid, Applica
         return await CreateAsync(entity, cancellationToken);
     }
 
-    public async Task<List<OrganizationDto>> GetAllOrganizationAsync(CancellationToken cancellationToken)
+    public async Task<Boolean> DeleteOrganizationAsync(Guid organizationId,
+        CancellationToken cancellationToken)
+    {
+        var entity = await FindByCondition(x => x.Id == organizationId)
+           .FirstOrDefaultAsync(cancellationToken);
+
+        if (entity == null)
+        {
+            throw new NotFoundException(nameof(Organization), organizationId);
+        }
+
+        await DeleteAsync(entity, cancellationToken);
+
+        return true;
+    }
+
+    public async Task<List<OrganizationDto>>
+        GetAllOrganizationAsync(CancellationToken cancellationToken)
     {
         var result = await FindAll()
             .ProjectTo<OrganizationDto>(_mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);
+
+        return result;
+    }
+
+    public async Task<OrganizationDto> GetOrganizationAsync(GetOrganizationQuery queries,
+            CancellationToken cancellationToken)
+    {
+        var entity = await GetByIdAsync(queries.id);
+
+        var result = _mapper.Map<OrganizationDto>(entity);
 
         return result;
     }
@@ -60,5 +89,24 @@ public class OrganizationRepository : RepositoryBase<Organization, Guid, Applica
             .PaginatedListAsync(queries.PageNumber, queries.PageSize, cancellationToken);
 
         return result;
+    }
+
+    public async Task<Guid>
+        UpdateOrganizationAsync(UpdateOrganizationCommand organization,
+            CancellationToken cancellationToken)
+    {
+        var entity = await GetByIdAsync(organization.Id);
+
+        if (entity == null)
+        {
+            throw new NotFoundException(nameof(Organization), organization.Id);
+        }
+
+        entity.Name = organization.Name ?? entity.Name;
+        entity.ShortName = organization.ShortName ?? entity.ShortName;
+        entity.Address = organization.Address ?? entity.Address;
+
+        await UpdateAsync(entity, cancellationToken);
+        return entity.Id;
     }
 }

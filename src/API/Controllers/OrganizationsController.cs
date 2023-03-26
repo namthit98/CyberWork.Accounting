@@ -1,6 +1,8 @@
 using CyberWork.Accounting.Application.Organizations.Commands.CreateOrganization;
 using CyberWork.Accounting.Application.Organizations.Commands.DeleteOrganization;
+using CyberWork.Accounting.Application.Organizations.Commands.UpdateOrganization;
 using CyberWork.Accounting.Application.Organizations.Queries.GetAllOrganizations;
+using CyberWork.Accounting.Application.Organizations.Queries.GetOrganization;
 using CyberWork.Accounting.Application.Organizations.Queries.GetOrganizations;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,11 +26,32 @@ public class OrganizationsController : ApiControllerBase
         return HandleResult(result);
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult>
+        GetOrganization(Guid id)
+    {
+        var query = new GetOrganizationQuery(id);
+
+        var result = await Mediator.Send(query);
+
+        return HandleResult(result);
+    }
+
     [HttpPost]
     public async Task<IActionResult>
         CreateOrganization([FromBody] CreateOrganizationCommand organization)
     {
         var result = await Mediator.Send(organization);
+        return HandleResult(result);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult>
+        Update(Guid id, [FromBody] UpdateOrganizationCommand organization)
+    {
+        organization.SetId(id);
+        var result = await Mediator.Send(organization);
+
         return HandleResult(result);
     }
 

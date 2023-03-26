@@ -1,38 +1,25 @@
-using CyberWork.Accounting.Application.Common.Exceptions;
 using CyberWork.Accounting.Application.Common.Interfaces;
 using CyberWork.Accounting.Application.Common.Models;
-using CyberWork.Accounting.Domain.Entities;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace CyberWork.Accounting.Application.Organizations.Commands.DeleteOrganization;
 
 public class DeleteOrganizationCommandHandler
     : IRequestHandler<DeleteOrganizationCommand, Result<Unit>>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IOrganizationRepository _organizationRepository;
 
-    public DeleteOrganizationCommandHandler(IApplicationDbContext context)
+    public DeleteOrganizationCommandHandler(IOrganizationRepository organizationRepository)
     {
-        _context = context;
+        _organizationRepository = organizationRepository;
     }
     public async Task<Result<Unit>> Handle(DeleteOrganizationCommand request,
         CancellationToken cancellationToken)
     {
-        var entity = await _context.Organizations
-            .Where(x => x.Id == request.Id)
-            .FirstOrDefaultAsync(cancellationToken);
+        var result = await _organizationRepository
+            .DeleteOrganizationAsync(request.Id, cancellationToken);
 
-        if (entity == null)
-        {
-            throw new NotFoundException(nameof(Organization), request.Id);
-        }
-
-        _context.Organizations.Remove(entity);
-
-        var result = await _context.SaveChangesAsync(cancellationToken) > 0;
-
-        if (!result) return Result<Unit>.Failure("Failed to delete the Organization");
+        if (!result) return Result<Unit>.Failure("Xoá tổ chức thất bại");
 
         return Result<Unit>.Success(Unit.Value);
     }

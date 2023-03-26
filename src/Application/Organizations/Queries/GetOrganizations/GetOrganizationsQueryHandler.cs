@@ -1,4 +1,3 @@
-using AutoMapper;
 using CyberWork.Accounting.Application.Common.Interfaces;
 using CyberWork.Accounting.Application.Common.Models;
 using CyberWork.Accounting.Application.Organizations.DTOs;
@@ -12,7 +11,7 @@ public class GetOrganizationsQueryHandler
 {
     private readonly IOrganizationRepository _organizationRepository;
 
-    public GetOrganizationsQueryHandler(IOrganizationRepository organizationRepository, IMapper mapper)
+    public GetOrganizationsQueryHandler(IOrganizationRepository organizationRepository)
     {
         _organizationRepository = organizationRepository;
     }

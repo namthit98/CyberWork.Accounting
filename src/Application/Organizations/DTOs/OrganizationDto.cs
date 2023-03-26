@@ -1,6 +1,5 @@
 using AutoMapper;
 using CyberWork.Accounting.Application.Common.Mappings;
-using CyberWork.Accounting.Application.Organizations.Commands.CreateOrganization;
 using CyberWork.Accounting.Domain.Entities;
 
 namespace CyberWork.Accounting.Application.Organizations.DTOs;
@@ -15,10 +14,4 @@ public class OrganizationDto : IMapFrom<Organization>
     public string OrganizationLevel { get; init; }
     public string Address { get; init; }
     public int Status { get; init; }
-
-    public void Mapping(Profile profile)
-    {
-        profile.CreateMap<Organization, OrganizationDto>();
-        profile.CreateMap<CreateOrganizationCommand, Organization>();
-    }
 }
