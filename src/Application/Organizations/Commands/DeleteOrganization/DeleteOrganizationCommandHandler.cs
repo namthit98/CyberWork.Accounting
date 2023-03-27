@@ -5,7 +5,7 @@ using MediatR;
 namespace CyberWork.Accounting.Application.Organizations.Commands.DeleteOrganization;
 
 public class DeleteOrganizationCommandHandler
-    : IRequestHandler<DeleteOrganizationCommand, Result<Unit>>
+    : IRequestHandler<DeleteOrganizationCommand, Result<Guid>>
 {
     private readonly IOrganizationRepository _organizationRepository;
 
@@ -13,14 +13,12 @@ public class DeleteOrganizationCommandHandler
     {
         _organizationRepository = organizationRepository;
     }
-    public async Task<Result<Unit>> Handle(DeleteOrganizationCommand request,
+    public async Task<Result<Guid>> Handle(DeleteOrganizationCommand request,
         CancellationToken cancellationToken)
     {
         var result = await _organizationRepository
             .DeleteOrganizationAsync(request.Id, cancellationToken);
 
-        if (!result) return Result<Unit>.Failure("Xoá tổ chức thất bại");
-
-        return Result<Unit>.Success(Unit.Value);
+        return Result<Guid>.Success(result);
     }
 }

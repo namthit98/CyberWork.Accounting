@@ -1,6 +1,7 @@
 using CyberWork.Accounting.Application.Organizations.Commands.CreateOrganization;
 using CyberWork.Accounting.Application.Organizations.Commands.DeleteOrganization;
 using CyberWork.Accounting.Application.Organizations.Commands.UpdateOrganization;
+using CyberWork.Accounting.Application.Organizations.Commands.UpdateStatusOrganization;
 using CyberWork.Accounting.Application.Organizations.Queries.GetAllOrganizations;
 using CyberWork.Accounting.Application.Organizations.Queries.GetOrganization;
 using CyberWork.Accounting.Application.Organizations.Queries.GetOrganizations;
@@ -54,6 +55,17 @@ public class OrganizationsController : ApiControllerBase
 
         return HandleResult(result);
     }
+
+    [HttpPatch("{id}/status")]
+    public async Task<IActionResult>
+        UpdateStatus(Guid id, [FromBody] UpdateStatusOrganizationCommand organization)
+    {
+        organization.SetId(id);
+        var result = await Mediator.Send(organization);
+
+        return HandleResult(result);
+    }
+
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteOrganization(Guid id)
