@@ -40,6 +40,8 @@ public static class ConfigureServices
             opt.User.RequireUniqueEmail = true;
         })
         .AddEntityFrameworkStores<ApplicationDbContext>();
+        services.AddTransient<IIdentityService, IdentityService>();
+
 
         return services;
     }
