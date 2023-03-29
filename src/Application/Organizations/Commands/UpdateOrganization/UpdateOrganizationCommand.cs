@@ -1,7 +1,4 @@
-using AutoMapper;
-using CyberWork.Accounting.Application.Common.Mappings;
 using CyberWork.Accounting.Application.Common.Models;
-using CyberWork.Accounting.Domain.Entities;
 using MediatR;
 
 namespace CyberWork.Accounting.Application.Organizations.Commands.UpdateOrganization;

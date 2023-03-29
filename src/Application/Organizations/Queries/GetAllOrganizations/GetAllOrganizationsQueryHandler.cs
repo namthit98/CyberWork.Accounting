@@ -20,7 +20,8 @@ public class GetAllOrganizationsQueryHandler
     public async Task<Result<List<OrganizationDto>>> Handle(GetAllOrganizationsQuery request,
         CancellationToken cancellationToken)
     {
-        var result = await _organizationRepository.GetAllOrganizationAsync(cancellationToken);
+        var result = await _organizationRepository.GetAllOrganizationAsync(
+            request.SearchValue, cancellationToken);
 
         return Result<List<OrganizationDto>>.Success(result);
     }

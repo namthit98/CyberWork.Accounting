@@ -7,6 +7,7 @@ namespace CyberWork.Accounting.Application.Organizations.Queries.GetOrganization
 public record GetOrganizationsQuery
     : IRequest<Result<PaginatedList<OrganizationDto>>>
 {
+    public string SearchValue { get; init; } = String.Empty;
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 }

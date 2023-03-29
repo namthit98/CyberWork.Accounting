@@ -24,6 +24,8 @@ public class RepositoryBase<T, K, TContext> : RepositoryQueryBase<T, K, TContext
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
+    public TContext GetContext() => _dbContext;
+
     public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken) =>
         _dbContext.Database.BeginTransactionAsync(cancellationToken);
 
