@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using CyberWork.Accounting.Infrastructure.Identity;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -9,7 +7,7 @@ using CyberWork.Accounting.Application.Common.Interfaces;
 
 namespace CyberWork.Accounting.Infrastructure.Persistence;
 
-public class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, Guid>, IApplicationDbContext
+public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     private readonly IMediator _mediator;
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;

@@ -1,6 +1,5 @@
 using CyberWork.Accounting.Application.Common.Interfaces;
 using CyberWork.Accounting.Infrastructure.Common;
-using CyberWork.Accounting.Infrastructure.Identity;
 using CyberWork.Accounting.Infrastructure.Persistence;
 using CyberWork.Accounting.Infrastructure.Persistence.Interceptors;
 using CyberWork.Accounting.Infrastructure.Repositories;
@@ -33,15 +32,6 @@ public static class ConfigureServices
         );
 
         services.AddScoped<ApplicationDbContextInitialiser>();
-
-        services.AddIdentity<AppUser, AppRole>(opt =>
-        {
-            opt.Password.RequireNonAlphanumeric = false;
-            opt.User.RequireUniqueEmail = true;
-        })
-        .AddEntityFrameworkStores<ApplicationDbContext>();
-        services.AddTransient<IIdentityService, IdentityService>();
-
 
         return services;
     }
