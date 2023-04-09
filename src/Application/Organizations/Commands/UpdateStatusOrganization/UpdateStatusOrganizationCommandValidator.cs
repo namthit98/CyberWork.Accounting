@@ -12,8 +12,6 @@ public class UpdateStatusOrganizationCommandValidator
             .NotNull();
 
         RuleFor(v => v.Status)
-            .NotEmpty()
-            .NotNull()
             .IsInEnum();
     }
 }

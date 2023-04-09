@@ -1,25 +1,47 @@
+using AutoMapper;
+using CyberWork.Accounting.Application.Common.Exceptions;
 using CyberWork.Accounting.Application.Common.Interfaces;
 using CyberWork.Accounting.Application.Common.Models;
+using CyberWork.Accounting.Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace CyberWork.Accounting.Application.Organizations.Commands.UpdateOrganization;
 
 public class UpdateOrganizationCommandHandler
     : IRequestHandler<UpdateOrganizationCommand, Result<Guid>>
 {
-    private readonly IOrganizationRepository _organizationRepository;
+    private readonly IMapper _mapper;
+    private readonly IApplicationDbContext _context;
 
-    public UpdateOrganizationCommandHandler(IOrganizationRepository organizationRepository)
+    public UpdateOrganizationCommandHandler(
+        IMapper mapper,
+        IApplicationDbContext context
+    )
     {
-        _organizationRepository = organizationRepository;
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _context = context ?? throw new ArgumentNullException(nameof(_context));
     }
 
     public async Task<Result<Guid>> Handle(UpdateOrganizationCommand organization,
        CancellationToken cancellationToken)
     {
-        var result = await _organizationRepository
-            .UpdateOrganizationAsync(organization, cancellationToken);
+        var entity = await _context.Organizations
+            .FirstOrDefaultAsync(x => x.Id == organization.Id, cancellationToken);
 
-        return Result<Guid>.Success(result);
+        if (entity == null)
+        {
+            throw new NotFoundException(nameof(Organization), organization.Id);
+        }
+
+        entity.Name = organization.Name ?? entity.Name;
+        entity.ShortName = organization.ShortName ?? entity.ShortName;
+        entity.Address = organization.Address ?? entity.Address;
+
+        _context.Organizations.Update(entity);
+
+        var result = await _context.SaveChangesAsync(cancellationToken) > 0;
+
+        return Result<Guid>.Success(entity.Id);
     }
 }

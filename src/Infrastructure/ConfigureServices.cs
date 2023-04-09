@@ -1,8 +1,6 @@
 using CyberWork.Accounting.Application.Common.Interfaces;
-using CyberWork.Accounting.Infrastructure.Common;
 using CyberWork.Accounting.Infrastructure.Persistence;
 using CyberWork.Accounting.Infrastructure.Persistence.Interceptors;
-using CyberWork.Accounting.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -15,8 +13,6 @@ public static class ConfigureServices
         IConfiguration configuration)
     {
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
-        services.AddScoped<IOrganizationRepository, OrganizationRepository>();
-        services.AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(
                 configuration.GetConnectionString("DefaultConnection"),
