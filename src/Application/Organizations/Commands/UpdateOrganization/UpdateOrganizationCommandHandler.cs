@@ -34,11 +34,9 @@ public class UpdateOrganizationCommandHandler
             throw new NotFoundException(nameof(Organization), organization.Id);
         }
 
-        entity.Name = organization.Name ?? entity.Name;
-        entity.ShortName = organization.ShortName ?? entity.ShortName;
-        entity.Address = organization.Address ?? entity.Address;
+        var updatedEntity = _mapper.Map(organization, entity);
 
-        _context.Organizations.Update(entity);
+        _context.Organizations.Update(updatedEntity);
 
         var result = await _context.SaveChangesAsync(cancellationToken) > 0;
 

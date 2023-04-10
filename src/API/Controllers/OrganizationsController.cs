@@ -46,7 +46,7 @@ public class OrganizationsController : ApiControllerBase
         return HandleResult(result);
     }
 
-    [HttpPut("{id}")]
+    [HttpPatch("{id}")]
     public async Task<IActionResult>
         Update(Guid id, [FromBody] UpdateOrganizationCommand organization)
     {

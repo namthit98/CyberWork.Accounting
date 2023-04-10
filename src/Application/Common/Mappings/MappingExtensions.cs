@@ -18,9 +18,22 @@ public static class MappingExtensions
 
         foreach (var property in destinationProperties)
         {
-            var value = sourceType.GetProperty(property.Name, flags);
-            if (value == null)
+            var sourceProperty = sourceType.GetProperty(property.Name, flags);
+
+            if (sourceProperty == null)
+            {
                 expression.ForMember(property.Name, opt => opt.Ignore());
+                continue;
+            }
+
+            expression.ForMember(property.Name, opt =>
+            {
+                opt.Condition((src, dest, srcValue, destValue, context) =>
+                {   
+                    return srcValue != null && !string.IsNullOrEmpty(srcValue.ToString());
+                });
+                opt.MapFrom(src => sourceProperty.GetValue(src));
+            });
         }
 
         return expression;

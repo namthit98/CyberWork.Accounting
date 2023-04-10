@@ -4,10 +4,12 @@ using System.Reflection;
 using CyberWork.Accounting.Domain.Entities;
 using CyberWork.Accounting.Infrastructure.Persistence.Interceptors;
 using CyberWork.Accounting.Application.Common.Interfaces;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CyberWork.Accounting.Infrastructure.Persistence;
 
-public class ApplicationDbContext : DbContext, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, Guid>,
+    IApplicationDbContext
 {
     private readonly IMediator _mediator;
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;
