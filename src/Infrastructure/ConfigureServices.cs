@@ -1,4 +1,6 @@
 using CyberWork.Accounting.Application.Common.Interfaces;
+using CyberWork.Accounting.Domain.Entities;
+using CyberWork.Accounting.Infrastructure.Identity;
 using CyberWork.Accounting.Infrastructure.Persistence;
 using CyberWork.Accounting.Infrastructure.Persistence.Interceptors;
 using Microsoft.EntityFrameworkCore;
@@ -23,13 +25,16 @@ public static class ConfigureServices
             )
         );
 
+        services.AddIdentityCore<AppUser>()
+            .AddRoles<AppRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>();
+
+        services.AddTransient<IRoleServices, RoleServices>();
         services.AddScoped<IApplicationDbContext>(
             provider => provider.GetRequiredService<ApplicationDbContext>()
         );
-
         services.AddScoped<ApplicationDbContextInitialiser>();
 
         return services;
     }
-
 }

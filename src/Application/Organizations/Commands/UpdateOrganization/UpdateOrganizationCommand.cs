@@ -14,9 +14,10 @@ public record UpdateOrganizationCommand : IRequest<Result<Guid>>, IMapFrom<Organ
     {
         Id = id;
     }
-    public string Name { get; set; }
-    public string ShortName { get; set; } = string.Empty;
-    public string Address { get; set; } = string.Empty;
+    public string Name { get; init; }
+    public string ShortName { get; init; } = string.Empty;
+    public string OrganizationLevel { get; init; } = string.Empty;
+    public string Address { get; init; } = string.Empty;
 
     public void Mapping(Profile profile)
     {

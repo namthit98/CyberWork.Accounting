@@ -1,4 +1,3 @@
-using AutoMapper;
 using CyberWork.Accounting.Application.Common.Mappings;
 using CyberWork.Accounting.Domain.Entities;
 
