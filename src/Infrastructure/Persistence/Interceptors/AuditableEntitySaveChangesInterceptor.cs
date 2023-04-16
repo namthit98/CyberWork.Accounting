@@ -1,3 +1,4 @@
+using CyberWork.Accounting.Application.Common.Interfaces;
 using CyberWork.Accounting.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -7,12 +8,11 @@ namespace CyberWork.Accounting.Infrastructure.Persistence.Interceptors;
 
 public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
 {
-    // private readonly ICurrentUserService _currentUserService;
+    private readonly ICurrentUserService _currentUserService;
 
-    public AuditableEntitySaveChangesInterceptor(
-    //  ICurrentUserService currentUserService,
-    )
+    public AuditableEntitySaveChangesInterceptor(ICurrentUserService currentUserService)
     {
+        _currentUserService = currentUserService;
     }
 
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
@@ -38,14 +38,14 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
         {
             if (entry.State == EntityState.Added)
             {
-                // entry.Entity.CreatedBy = _currentUserService.UserId;
+                entry.Entity.CreatedBy = _currentUserService.UserId;
                 entry.Entity.Created = DateTime.Now;
             }
 
             if (entry.State == EntityState.Added || entry.State == EntityState.Modified
                 || entry.HasChangedOwnedEntities())
             {
-                // entry.Entity.LastModifiedBy = _currentUserService.UserId;
+                entry.Entity.LastModifiedBy = _currentUserService.UserId;
                 entry.Entity.LastModified = DateTime.Now;
             }
         }
