@@ -30,6 +30,7 @@ public static class ConfigureServices
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         services.AddTransient<IRoleServices, RoleServices>();
+        services.AddTransient<IUserServices, UserServices>();
         services.AddScoped<IApplicationDbContext>(
             provider => provider.GetRequiredService<ApplicationDbContext>()
         );

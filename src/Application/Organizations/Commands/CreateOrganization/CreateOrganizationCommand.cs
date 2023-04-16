@@ -6,7 +6,8 @@ using MediatR;
 
 namespace CyberWork.Accounting.Application.Organizations.Commands.CreateOrganization;
 
-public record CreateOrganizationCommand : IRequest<Result<Guid>>, IMapFrom<Organization>
+public record CreateOrganizationCommand : IRequest<Result<Guid>>,
+    IMapFrom<Organization>
 {
     public string Code { get; init; }
     public string Name { get; init; }

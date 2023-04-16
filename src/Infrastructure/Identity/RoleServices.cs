@@ -1,5 +1,6 @@
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using CyberWork.Accounting.Application.Common.Exceptions;
 using CyberWork.Accounting.Application.Common.Interfaces;
 using CyberWork.Accounting.Application.Common.Mappings;
 using CyberWork.Accounting.Application.Common.Models;
@@ -37,7 +38,7 @@ public class RoleServices : IRoleServices
             return role.Id;
         }
 
-        return Guid.Empty;
+        throw new BadException("Tạo vai trò thất bại");
     }
 
     public async Task<Guid> DeleteRoleAsync(Guid id)
@@ -46,7 +47,7 @@ public class RoleServices : IRoleServices
 
         if (role == null)
         {
-            throw new Exception("Vai trò không tồn tại");
+            throw new BadException("Vai trò không tồn tại");
         }
 
         var result = await _roleManager.DeleteAsync(role);
@@ -56,7 +57,7 @@ public class RoleServices : IRoleServices
         }
         else
         {
-            throw new Exception("Xoá vai trò thất bại");
+            throw new BadException("Xoá vai trò thất bại");
         }
     }
 
@@ -66,7 +67,7 @@ public class RoleServices : IRoleServices
 
         if (role == null)
         {
-            throw new Exception("Vai trò không tồn tại");
+            throw new BadException("Vai trò không tồn tại");
         }
 
         var result = _mapper.Map<RoleDto>(role);
@@ -99,7 +100,7 @@ public class RoleServices : IRoleServices
 
         if (role == null)
         {
-            throw new Exception("Vai trò không tồn tại");
+            throw new BadException("Vai trò không tồn tại");
         }
 
         role.Name = name ?? role.Name;
@@ -113,7 +114,7 @@ public class RoleServices : IRoleServices
         }
         else
         {
-            throw new Exception("Cập nhật vai trò thất bại.");
+            throw new BadException("Cập nhật vai trò thất bại.");
         }
     }
 }

@@ -19,7 +19,7 @@ public class GetOrganizationsQueryHandler
         IApplicationDbContext context)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        _context = context ?? throw new ArgumentNullException(nameof(_context));
+        _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
     public async Task<Result<PaginatedList<OrganizationDto>>> Handle(GetOrganizationsQuery queries,

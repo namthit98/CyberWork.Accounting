@@ -5,24 +5,24 @@
 namespace CyberWork.Accounting.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateAppRole : Migration
+    public partial class UpdateUserProfileData2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Description",
-                table: "AspNetRoles",
-                type: "nvarchar(max)",
-                nullable: true);
+            migrationBuilder.RenameColumn(
+                name: "Addres",
+                table: "UserProfiles",
+                newName: "Address");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Description",
-                table: "AspNetRoles");
+            migrationBuilder.RenameColumn(
+                name: "Address",
+                table: "UserProfiles",
+                newName: "Addres");
         }
     }
 }

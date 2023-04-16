@@ -17,6 +17,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
                 { typeof(ValidationException), HandleValidationException },
                 { typeof(NotFoundException), HandleNotFoundException },
                 { typeof(ConflictException), HandleConflictException },
+                { typeof(BadException), HandleBadException },
                 { typeof(UnauthorizedAccessException), HandleUnauthorizedAccessException },
                 // { typeof(ForbiddenAccessException), HandleForbiddenAccessException },
             };
@@ -95,6 +96,21 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         {
             Type = "https://www.rfc-editor.org/rfc/rfc7231#section-6.5.8",
             Title = "The entity with key is existed",
+            Detail = exception.Message
+        };
+
+        context.Result = new ConflictObjectResult(details);
+
+        context.ExceptionHandled = true;
+    }
+
+    private void HandleBadException(ExceptionContext context)
+    {
+        var exception = (BadException)context.Exception;
+
+        var details = new ProblemDetails()
+        {
+            Title = "Bad Exception",
             Detail = exception.Message
         };
 

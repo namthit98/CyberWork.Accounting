@@ -24,7 +24,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, Guid>,
     }
 
     public DbSet<Organization> Organizations => Set<Organization>();
-
+    public DbSet<UserProfile> UserProfiles => Set<UserProfile>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
