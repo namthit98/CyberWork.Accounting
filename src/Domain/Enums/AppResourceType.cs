@@ -1,8 +1,8 @@
 namespace CyberWork.Accounting.Domain.Enums;
 
-public enum Status
+public enum AppResourceType
 {
     None = 0,
-    Inactive = 1,
-    Active = 2
+    Item = 1,
+    Group = 2
 }

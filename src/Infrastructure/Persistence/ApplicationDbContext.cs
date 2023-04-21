@@ -25,6 +25,10 @@ public class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, Guid>,
 
     public DbSet<Organization> Organizations => Set<Organization>();
     public DbSet<UserProfile> UserProfiles => Set<UserProfile>();
+    public DbSet<AppResourceAction> AppResourceActions => Set<AppResourceAction>();
+    public DbSet<AppResource> AppResources => Set<AppResource>();
+    public DbSet<UserPermission> UserPermissions => Set<UserPermission>();
+    public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
